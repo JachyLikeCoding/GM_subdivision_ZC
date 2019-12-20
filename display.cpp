@@ -1,8 +1,7 @@
-#include "basic.h"
+#include "display.h"
+
 int width;
 int height;
-
-void initLights();
 
 void init(int argc, char *argv[]){
     width = WinWidth;
@@ -11,7 +10,7 @@ void init(int argc, char *argv[]){
     glutInitDisplayMode(GLUT_SINGLE | GLUT_DEPTH | GLUT_RGB);
     glutInitWindowSize(width, height);
     glutInitWindowPosition(100, 100);
-    glutCreateWindow("Subdivision by Chizhang");
+    glutCreateWindow("Catmull-Clark Subdivision surface (by Chizhang)");
     initLights();
 }
 
