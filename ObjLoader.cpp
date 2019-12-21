@@ -1,6 +1,13 @@
 #include "ObjLoader.h"
 
-void Object::initObject(const string &objName) {
+void Object::initObject(const string &_objName, 
+										deque<Vertex *> &_vqueue,
+										deque<Edge *> &_equeue,
+										deque<Face *> &_fqueue) {
+	objName = _objName;
+	fqueue = _fqueue;
+	vqueue = _vqueue;
+	equeue = _equeue;
 	bool flag = loadObj(objName);
 	if (!flag) 
 	{
@@ -20,14 +27,14 @@ bool Object::loadObj(const string &objName) {
 	
 	string head;
 	GLfloat x, y, z;
-
+	deque<Vertex *> tmpvqueue;
 	while (input >> head) {
 		if (input.eof())
 			break;
 		else {
 			if (head == "v") {
 				input >> x >> y >> z;
-				vqueue.push_back(new Vertex(x,y,z));
+				tmpvqueue.push_back(new Vertex(x,y,z));
 			}
 			else if (head == "f") {
 				string::iterator iter;
@@ -37,10 +44,10 @@ bool Object::loadObj(const string &objName) {
 				for (int i = 0; i < 4; i++) {
 					iter = find(tmps[i].begin(), tmps[i].end(), '/');
 					vid[i] = stoi(tmps[i].substr(0, iter - tmps[i].begin()));//注意obj文件里顶点序号从1或-1开始
-					vid[i] > 0 ? (vid[i]--) : (vid[i] += vqueue.size());//这里把它统一成0,1,2,3序号
+					vid[i] > 0 ? (vid[i]--) : (vid[i] += tmpvqueue.size());//这里把它统一成0,1,2,3序号
 				}
-				//TODO: find four points vid[0], vid[1], vid[2], vid[3]
-				Face *f = new Face(vqueue[vid[0]], vqueue[vid[0]], vqueue[vid[0]], vqueue[vid[0]], equeue, vqueue);
+				
+				Face *f = new Face(tmpvqueue[vid[0]], tmpvqueue[vid[1]], tmpvqueue[vid[2]], tmpvqueue[vid[3]], equeue, vqueue);
 				fqueue.push_back(f);
 			}
 			else
@@ -49,9 +56,8 @@ bool Object::loadObj(const string &objName) {
 			}
 		}
 	}
-	//just for debug:
-	cout << vqueue.size() << endl;
-	cout << fqueue.size() << endl;
+
+	cout << "tmpvqueue count:" << tmpvqueue.size() << endl;
 	return true;
 }
 
@@ -59,21 +65,8 @@ bool Object::loadObj(const string &objName) {
 
 //just for debug
 void Object::test() {
-	//test vertices of face
 	cout << "face count: " << fqueue.size() << endl;
 	cout << "vertices count:" << vqueue.size() << endl;
-	/*for (int i = 0; i < faces.size(); i++) {
-		CalFaceEdges(i);
-		cout << "[" << i << "]";
-		for (int j = 0; j < faces[i].size(); j++) {
-			cout << faces[i][j] << "\t";
-		} 
-		cout << endl;
-	}*/
-	//test edges of face:
-	/*cout << edges.size() << endl;
-	for (int i = 0; i < edges.size(); i++) {
-		cout << "edge_polygon_id: " << edges[i].edge_polygon_id;
-		cout << "\tedge_dy: " << edges[i].dy << endl;
-	}*/
+	cout << "edges count:" << equeue.size() << endl;
+	cout << endl;
 }

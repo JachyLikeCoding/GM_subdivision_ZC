@@ -17,7 +17,13 @@ bool Vertex::operator==(const Vertex &v){
 
 Vec3f Vertex::calVertexPoint(){
     int n = vEdges.size();
-    
+	int m = vFaces.size();
+	cout << "vEdges size: " << n << endl;
+	cout << "vFaces size: " << m << endl;
+	if (m != n) {
+		cerr << "Wrong! Edge count is " << n << ", Face count is " << m << endl;
+	}
+
     //Q:face point
     Vec3f facePoint;
     for(int i = 0; i < n; i++){
@@ -36,7 +42,7 @@ Vec3f Vertex::calVertexPoint(){
     Vec3f P = coord;
 
     //new vertex:
-    Vec3f newVertexPoint = (facePoint + 2 * edgePoint + (n - 3) * P) / GLfloat(n);
+    Vec3f newVertexPoint = (facePoint + 2 * edgePoint + float(n - 3) * P) / GLfloat(n);
 	return newVertexPoint;
 }
 
@@ -47,7 +53,9 @@ Edge:
 Vec3f Edge::calEdgePoint()
 {
 	Vec3f edgePoint;
-	edgePoint = eFaces[0]->fCenterv + eFaces[1]->fCenterv + eFaces[2]->fCenterv;
+	for (int i = 0; i < eFaces.size(); i++) {
+		edgePoint += eFaces[i]->fCenterv;
+	}
 	edgePoint += midv;
 	return edgePoint;
 }
@@ -73,33 +81,37 @@ Face:
 void Face::addEdge(Vertex &v1, Vertex &v2, deque<Edge *> &equeue) 
 {
 	Edge *newedge = nullptr;
-	Edge *tmpe = getEdge(Edge(v1, v2), equeue);
+	Edge *tmpe = getEdge(Edge(v1, v2, -1), equeue);
 	if (tmpe != nullptr) {
 		newedge = tmpe;
 	}
 	else {
+		newedge = new Edge(v1, v2, level);
 		equeue.push_back(newedge);
 	}
-	fEdges.push_back(tmpe);
-	//TODO: bug is here !!!
-	tmpe->eFaces.push_back(this);
+	fEdges.push_back(newedge);
+	newedge->eFaces.push_back(this);
 }
 
 
-void Face::addVertex(Vertex &v, deque<Vertex*>& vqueue)
+void Face::addVertex(Vertex *&v, deque<Vertex*>& vqueue)
 {
-	Vertex *tmpv = nullptr;
+	/*Vertex *tmpv = nullptr;
 	for (int i = 0; i < vqueue.size(); i++) {
-		if (v == (*vqueue[i])) {
+		if (v == (vqueue[i])) {
 			tmpv = vqueue[i];
 		}
-	}
+	}*/
+	Vertex *tmpv = getVertex(*v, vqueue);
 	//v is not in the vqueue
 	if (tmpv == nullptr) {
-		vqueue.push_back(&v);
+		vqueue.push_back(v);
 	}
-	v.vFaces.push_back(this);
-	fVertices.push_back(&v);
+	else {//v is in the vqueue
+		v = tmpv;
+	}
+	fVertices.push_back(v);
+	v->vFaces.push_back(this);
 }
 
 
@@ -109,6 +121,7 @@ void Face::faceDisplay()
 	for (int i = 0; i < fVertices.size(); i++) {
 		Vec3f p = fVertices[i]->getCoord();
 		glVertex3f(p[0], p[1], p[2]);
+		cout << p[0] << ", " << p[1] << ", " << p[2] << endl;
 	}
 }
 

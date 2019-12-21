@@ -1,4 +1,7 @@
 #pragma once
+#ifndef BASIC_H
+#define BASIC_H
+
 #include<iostream>
 #include<cmath>
 #include<ctime>
@@ -14,3 +17,6 @@ using namespace std;
 
 #define WinWidth 1028
 #define WinHeight 800
+
+
+#endif // !BASIC_H

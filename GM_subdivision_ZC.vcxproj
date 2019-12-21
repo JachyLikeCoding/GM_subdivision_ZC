@@ -109,7 +109,6 @@
     <ClInclude Include="basic.h" />
     <ClInclude Include="DataStructure.h" />
     <ClInclude Include="display.h" />
-    <ClInclude Include="fileloader.h" />
     <ClInclude Include="ObjLoader.h" />
     <ClInclude Include="processor.h" />
     <ClInclude Include="geometry.h" />

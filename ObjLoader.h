@@ -7,14 +7,18 @@
 class Object {
 public:
 	Object(){}
-	void initObject(const string &objName);
-	int getWinWidth() { return winWidth; }
-	int getWinHeight() { return winHeight; }
+	void initObject(const string &_objName,
+		deque<Vertex *> &_vqueue,
+		deque<Edge *> &_equeue,
+		deque<Face *> &_fqueue);
+	deque<Face *> getFqueue() { return fqueue; }
+	deque<Edge *> getEqueue() { return equeue; }
+	deque<Vertex *> getVqueue() { return vqueue; }
 	void test();
 
 private:
-	int winWidth, winHeight;
-	int level;
+	string objName;
+	//int level;
 	bool loadObj(const string &objName);
 	deque<Face *> fqueue;
 	deque<Edge *> equeue;
