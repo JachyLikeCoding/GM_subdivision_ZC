@@ -10,7 +10,6 @@
 #include<string>
 #include<vector>
 #include<deque>
-
 #include "GL/glut.h"
 
 using namespace std;

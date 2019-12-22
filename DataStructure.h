@@ -50,6 +50,7 @@ public:
 	}
 
 	Vec3f calEdgePoint();
+	void edgeDisplay();
 	bool operator==(const Edge &e);
 };
 
@@ -67,18 +68,18 @@ public:
 	void addEdge(Vertex &v1, Vertex &v2, deque<Edge *> &equeue);
 	void addVertex(Vertex *&v, deque<Vertex *> &vqueue);
 
-	////triangle face
-	//Face(Vertex *&v1, Vertex *&v2, Vertex *&v3, deque<Edge *> &equeue, deque<Vertex *> &vqueue, int _level = 0) {
-	//	level = _level;
-	//	fCenterv = ((*v1).coord + (*v2).coord + (*v3).coord) / 3;
-	//	addVertex(v1, vqueue);
-	//	addVertex(v2, vqueue);
-	//	addVertex(v3, vqueue);
-	//	addEdge(*v1, *v2, equeue);
-	//	addEdge(*v2, *v3, equeue);
-	//	addEdge(*v3, *v1, equeue);
-	//	setNormal();
-	//}
+	//triangle face
+	Face(Vertex *&v1, Vertex *&v2, Vertex *&v3, deque<Edge *> &equeue, deque<Vertex *> &vqueue, int _level = 0) {
+		level = _level;
+		fCenterv = ((*v1).coord + (*v2).coord + (*v3).coord) / 3;
+		addVertex(v1, vqueue);
+		addVertex(v2, vqueue);
+		addVertex(v3, vqueue);
+		addEdge(*v1, *v2, equeue);
+		addEdge(*v2, *v3, equeue);
+		addEdge(*v3, *v1, equeue);
+		setNormal();
+	}
 	//quad face
 	Face(Vertex *&v1, Vertex *&v2, Vertex *&v3, Vertex *&v4, deque<Edge *> &equeue, deque<Vertex *> &vqueue, int _level = 0) {
 		level = _level;

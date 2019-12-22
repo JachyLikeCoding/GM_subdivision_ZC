@@ -6,6 +6,7 @@
 
 class Object {
 public:
+	int fileType;
 	Object(){}
 	void initObject(const string &_objName,
 		deque<Vertex *> &_vqueue,
@@ -18,7 +19,6 @@ public:
 
 private:
 	string objName;
-	//int level;
 	bool loadObj(const string &objName);
 	deque<Face *> fqueue;
 	deque<Edge *> equeue;

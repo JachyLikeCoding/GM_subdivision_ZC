@@ -9,4 +9,6 @@ public:
 	Object obj;
 	void initProcessor(Object &_obj);
 	void subdivision(int level, deque<Vertex *> &vqueue, deque<Edge *> &equeue, deque<Face *> &fqueue);
+	void subdivision3(int level, deque<Vertex *> &vqueue, deque<Edge *> &equeue, deque<Face *> &fqueue);
+	void subdivision4(int level, deque<Vertex *> &vqueue, deque<Edge *> &equeue, deque<Face *> &fqueue);
 };
