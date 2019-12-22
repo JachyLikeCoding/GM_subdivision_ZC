@@ -18,21 +18,21 @@ bool Vertex::operator==(const Vertex &v){
 Vec3f Vertex::calVertexPoint(){
     int n = vEdges.size();
 	int m = vFaces.size();
-	cout << "vEdges size: " << n << endl;
-	cout << "vFaces size: " << m << endl;
+	/*cout << "vEdges size: " << n << endl;
+	cout << "vFaces size: " << m << endl;*/
 	if (m != n) {
 		cerr << "Wrong! Edge count is " << n << ", Face count is " << m << endl;
 	}
 
     //Q:face point
-    Vec3f facePoint;
+    Vec3f facePoint(0);
     for(int i = 0; i < n; i++){
         facePoint += vFaces[i]->fCenterv;
     }
     facePoint /= GLfloat(n);
 
     //2R:edge points
-    Vec3f edgePoint;
+    Vec3f edgePoint(0);
     for(int i = 0; i < n; i++){
         edgePoint += vEdges[i]->midv;
     }
@@ -43,6 +43,9 @@ Vec3f Vertex::calVertexPoint(){
 
     //new vertex:
     Vec3f newVertexPoint = (facePoint + 2 * edgePoint + float(n - 3) * P) / GLfloat(n);
+
+	//cout << "newVertexPoint : " << newVertexPoint.x << ", " << newVertexPoint.y << ", " << newVertexPoint.z << endl;
+
 	return newVertexPoint;
 }
 
@@ -57,7 +60,18 @@ Vec3f Edge::calEdgePoint()
 		edgePoint += eFaces[i]->fCenterv;
 	}
 	edgePoint += midv;
+	edgePoint /= 3;
 	return edgePoint;
+}
+
+void Edge::edgeDisplay()
+{
+	for (int i = 0; i < eVertex.size(); i++) {
+		Vec3f p = eVertex[i]->getCoord();
+		glVertex3f(p[0], p[1], p[2]);
+		//cout << p[0] << ", " << p[1] << ", " << p[2] << endl;
+	}
+
 }
 
 
@@ -121,15 +135,16 @@ void Face::faceDisplay()
 	for (int i = 0; i < fVertices.size(); i++) {
 		Vec3f p = fVertices[i]->getCoord();
 		glVertex3f(p[0], p[1], p[2]);
-		cout << p[0] << ", " << p[1] << ", " << p[2] << endl;
+		//cout << p[0] << ", " << p[1] << ", " << p[2] << endl;
 	}
 }
 
 
 void Face::setNormal()
 {
-	Vec3f e1 = fVertices[0]->coord - fVertices[1]->coord;
-	Vec3f e2 = fVertices[2]->coord - fVertices[1]->coord;
+	Vec3f e1 = fVertices[1]->coord - fVertices[0]->coord;
+	Vec3f e2 = fVertices[2]->coord - fVertices[0]->coord;
 	normal = e1.crossProduct(e2);
 	normal.normalize();
+	//cout << "debug normal: " << normal.x << ", " << normal.y << ", " << normal.z << endl;
 }
